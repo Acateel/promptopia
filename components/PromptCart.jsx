@@ -60,6 +60,7 @@ const PromptCart = ({ post, handleTagClick, handleEdit, handleDelete }) => {
             }
             width={12}
             height={12}
+            alt="copy_btn"
           />
         </div>
       </div>
