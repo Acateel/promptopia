@@ -20,7 +20,6 @@ const MyProfile = () => {
     if (session?.user.id) {
       fetchPosts();
     }
-    fetchPosts();
   }, []);
 
   const handleEdit = (post) => {
