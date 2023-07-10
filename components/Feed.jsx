@@ -67,7 +67,12 @@ const Feed = () => {
         />
       </form>
 
-      <PromptCartList data={filteredPosts} handleTagClick={() => {}} />
+      <PromptCartList
+        data={filteredPosts}
+        handleTagClick={(tag) => {
+          setSearchText(tag);
+        }}
+      />
     </section>
   );
 };
