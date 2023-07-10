@@ -23,28 +23,37 @@ const Feed = () => {
   const [allPosts, setAllPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
 
-  const handleSearchChange = (e) => {
-    setSearchText(e.target.value);
-    setFilteredPosts(
-      allPosts.filter(
-        (post) =>
-          post.prompt.includes(searchText) ||
-          post.tag.includes(searchText) ||
-          post.creator.username.includes(searchText)
-      )
-    );
-  };
-
+  // fetch posts
   useEffect(() => {
     const fetchPosts = async () => {
       const response = await fetch("/api/prompt");
       const data = await response.json();
       setAllPosts(data);
-      setFilteredPosts(data);
     };
 
     fetchPosts();
   }, []);
+
+  // search posts with delay
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (searchText === "") {
+        setFilteredPosts(allPosts);
+      } else {
+        setFilteredPosts(
+          allPosts.filter(
+            (post) =>
+              post.prompt.includes(searchText) ||
+              post.tag.includes(searchText) ||
+              post.creator.username.includes(searchText)
+          )
+        );
+      }
+    }, 500);
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [searchText, allPosts]);
 
   return (
     <section className="feed">
@@ -53,7 +62,7 @@ const Feed = () => {
           type="text"
           placeholder="Search for a tag or a username"
           value={searchText}
-          onChange={handleSearchChange}
+          onChange={(e) => setSearchText(e.target.value)}
           className="search_input peer"
         />
       </form>
