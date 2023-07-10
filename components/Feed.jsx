@@ -20,15 +20,27 @@ const PromptCartList = ({ data, handleTagClick }) => {
 
 const Feed = () => {
   const [searchText, setSearchText] = useState("");
-  const [posts, setPosts] = useState([]);
+  const [allPosts, setAllPosts] = useState([]);
+  const [filteredPosts, setFilteredPosts] = useState([]);
 
-  const handleSearchChange = (e) => {};
+  const handleSearchChange = (e) => {
+    setSearchText(e.target.value);
+    setFilteredPosts(
+      allPosts.filter(
+        (post) =>
+          post.prompt.includes(searchText) ||
+          post.tag.includes(searchText) ||
+          post.creator.username.includes(searchText)
+      )
+    );
+  };
 
   useEffect(() => {
     const fetchPosts = async () => {
       const response = await fetch("/api/prompt");
       const data = await response.json();
-      setPosts(data);
+      setAllPosts(data);
+      setFilteredPosts(data);
     };
 
     fetchPosts();
@@ -46,7 +58,7 @@ const Feed = () => {
         />
       </form>
 
-      <PromptCartList data={posts} handleTagClick={() => {}} />
+      <PromptCartList data={filteredPosts} handleTagClick={() => {}} />
     </section>
   );
 };
